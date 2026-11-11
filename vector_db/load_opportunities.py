@@ -1,13 +1,16 @@
-
+import os
 import mysql.connector
 import chromadb
+from dotenv import load_dotenv
+from pathlib import Path
 
-# Connect to MySQL
+load_dotenv(Path(__file__).resolve().parent.parent / "backend" / ".env")
+
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="***REMOVED***",
-    database="intelligent_campus"
+    host=os.getenv("MYSQL_HOST", "localhost"),
+    user=os.getenv("MYSQL_USER", "root"),
+    password=os.getenv("MYSQL_PASSWORD"),
+    database=os.getenv("MYSQL_DATABASE", "intelligent_campus")
 )
 
 cursor = db.cursor(dictionary=True)
