@@ -1,0 +1,153 @@
+
+erDiagram
+    ROLES {
+        int role_id PK
+        varchar role_name UK
+    }
+
+    PERMISSIONS {
+        int permission_id PK
+        varchar permission_name UK
+    }
+
+    ROLE_PERMISSIONS {
+        int role_id PK, FK
+        int permission_id PK, FK
+    }
+
+    USERS {
+        int user_id PK
+        varchar full_name
+        varchar email UK
+        varchar password_hash
+        boolean is_active
+        timestamp created_at
+    }
+
+    USER_ROLES {
+        int user_id PK, FK
+        int role_id PK, FK
+        timestamp assigned_at
+    }
+
+    STUDENT_PROFILES {
+        int user_id PK, FK
+        varchar srn UK
+        varchar department
+        int academic_year
+        int graduation_year
+        text bio
+    }
+
+    ORGANIZER_PROFILES {
+        int user_id PK, FK
+        varchar organization_name
+        varchar organization_type
+        text description
+    }
+
+    CATEGORIES {
+        int category_id PK
+        varchar category_name UK
+        int parent_category_id FK
+        text description
+    }
+
+    OPPORTUNITIES {
+        int opportunity_id PK
+        varchar title
+        text description
+        int category_id FK
+        int created_by FK
+        enum opportunity_type
+        varchar location
+        date application_deadline
+        enum status
+        timestamp created_at
+    }
+
+    SKILLS {
+        int skill_id PK
+        varchar skill_name UK
+    }
+
+    STUDENT_SKILLS {
+        int user_id PK, FK
+        int skill_id PK, FK
+        enum proficiency
+    }
+
+    OPPORTUNITY_SKILLS {
+        int opportunity_id PK, FK
+        int skill_id PK, FK
+    }
+
+    APPLICATIONS {
+        int application_id PK
+        int opportunity_id FK
+        int student_id FK
+        enum application_status
+        timestamp applied_at
+    }
+
+    EVENTS {
+        int event_id PK
+        int opportunity_id FK, UK
+        datetime event_date
+        varchar venue
+        int capacity
+    }
+
+    REGISTRATIONS {
+        int registration_id PK
+        int event_id FK
+        int student_id FK
+        enum registration_status
+        timestamp registered_at
+    }
+
+    CLUBS {
+        int club_id PK
+        varchar club_name UK
+        text description
+        int faculty_coordinator FK
+    }
+
+    CLUB_MEMBERS {
+        int club_id PK, FK
+        int student_id PK, FK
+        timestamp joined_at
+        enum membership_status
+    }
+
+    NOTIFICATIONS {
+        int notification_id PK
+        int user_id FK
+        varchar title
+        text message
+        boolean is_read
+        timestamp created_at
+    }
+
+    ROLES ||--o{ ROLE_PERMISSIONS : has
+    PERMISSIONS ||--o{ ROLE_PERMISSIONS : assigned
+    USERS ||--o{ USER_ROLES : receives
+    ROLES ||--o{ USER_ROLES : assigned
+    USERS ||--o| STUDENT_PROFILES : has
+    USERS ||--o| ORGANIZER_PROFILES : has
+    CATEGORIES o|--o{ CATEGORIES : contains
+    CATEGORIES ||--o{ OPPORTUNITIES : classifies
+    USERS ||--o{ OPPORTUNITIES : creates
+    STUDENT_PROFILES ||--o{ STUDENT_SKILLS : possesses
+    SKILLS ||--o{ STUDENT_SKILLS : maps
+    OPPORTUNITIES ||--o{ OPPORTUNITY_SKILLS : requires
+    SKILLS ||--o{ OPPORTUNITY_SKILLS : maps
+    OPPORTUNITIES ||--o{ APPLICATIONS : receives
+    STUDENT_PROFILES ||--o{ APPLICATIONS : submits
+    OPPORTUNITIES ||--o| EVENTS : hosts
+    EVENTS ||--o{ REGISTRATIONS : has
+    STUDENT_PROFILES ||--o{ REGISTRATIONS : makes
+    USERS o|--o{ CLUBS : coordinates
+    CLUBS ||--o{ CLUB_MEMBERS : has
+    STUDENT_PROFILES ||--o{ CLUB_MEMBERS : joins
+    USERS ||--o{ NOTIFICATIONS : receives
