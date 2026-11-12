@@ -212,9 +212,9 @@ Opportunities are ranked according to their match percentage, helping students p
 
 **Project:** CampusConnect – Intelligent Campus Opportunity Discovery Platform
 
-**Student:** Harsh Kalekar
+**Student:** Harsh Kalekar , Gnanasagar H
 
-**SRN:** PES1UG24CS183
+**SRN:** PES1UG24CS183 , PES1UG24CS171
 
 **University:** PES University
 
